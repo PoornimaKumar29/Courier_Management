@@ -23,6 +23,9 @@ Status varchar(50) check(Status in ('delivered','Dispatched')),
 Tracking_Number bigint unique not null,
 Delivary_Date date not null
 )
+alter table courier add Employee_id int;
+alter table courier add constraint fk_employee foreign key(Employee_id) references Employee(Employee_id);
+
 drop table Courier
 ---------------------------------------------------------------------create Courierservice table--------------------------------------------
 create table Courierservice(
@@ -47,7 +50,6 @@ Location_id int identity(201,1) primary key,
 Location_Name varchar(100) not null,
 Address varchar(100) not null,
 )
-
 --------------------------------------------------------------------create Courierservice table--------------------------------------------
 
 create table Payment(
