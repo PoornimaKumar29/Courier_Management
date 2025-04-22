@@ -108,7 +108,7 @@ having sum(p.amount) > 50
 --23. Retrieve Payments with Courier Information
 
 SELECT p.Payment_id, p.Amount, p.PaymentDate, 
-       c.Courier_id, c.SenderName, c.ReceiverName, c.Status, c.Tracking_Number
+c.Courier_id, c.SenderName, c.ReceiverName, c.Status, c.Tracking_Number
 FROM Payment p
 JOIN Courier c ON p.Courier_id = c.Courier_id
 
@@ -147,13 +147,13 @@ SELECT * FROM Payment WHERE PaymentDate = '2024-03-10'
 --29. Get Courier Information for Each Payment
 
 SELECT p.Payment_id, p.Amount, p.PaymentDate, 
-       c.Courier_id, c.SenderName, c.ReceiverName, c.Weight, c.Status, c.Tracking_Number
+c.Courier_id, c.SenderName, c.ReceiverName, c.Weight, c.Status, c.Tracking_Number
 FROM Payment p
 LEFT JOIN Courier c ON p.Courier_id = c.Courier_id
 --30. get payment details with location
 
 select p.payment_id, p.amount, p.paymentdate, 
-       l.location_id, l.location_name, l.address
+l.location_id, l.location_name, l.address
 from payment p
 left join location l on p.location_id = l.location_id
 --31. calculating total payments for each courier
@@ -210,122 +210,6 @@ u.user_address as sender_address
 from courier c
 left join user_tb u on c.sendername = u.user_name
 
---39. retrieve a list of couriers and their corresponding receiver information (if available)
-
-sql
-Copy
-Edit
-select c.courier_id, c.tracking_number, c.status, 
-       u.user_id as receiver_id, u.user_name as receiver_name, u.user_address as receiver_address
-from courier c
-left join user_tb u on c.receivername = u.user_name;
-40. retrieve a list of couriers along with the courier service details (if available)
-
-sql
-Copy
-Edit
-select c.courier_id, c.tracking_number, c.status, 
-       cs.service_id, cs.servicename, cs.cost
-from courier c
-left join courierservice cs on c.courier_id = cs.service_id;
-41. retrieve a list of employees and the number of couriers assigned to each employee
-
-sql
-Copy
-Edit
-select e.employee_id, e.employee_name, count(c.courier_id) as total_couriers
-from employee e
-left join courier c on e.employee_id = c.employee_id
-group by e.employee_id, e.employee_name;
-42. retrieve a list of locations and the total payment amount received at each location
-
-sql
-Copy
-Edit
-select l.location_id, l.location_name, sum(p.amount) as total_payment
-from location l
-left join payment p on l.location_id = p.location_id
-group by l.location_id, l.location_name;
-43. retrieve all couriers sent by the same sender (based on sendername)
-
-sql
-Copy
-Edit
-select * from courier 
-where sendername in (
-    select sendername from courier 
-    group by sendername having count(*) > 1
-);
-44. list all employees who share the same role
-
-sql
-Copy
-Edit
-select * from employee 
-where employee_role in (
-    select employee_role from employee 
-    group by employee_role having count(*) > 1
-);
-45. retrieve all payments made for couriers sent from the same location
-
-sql
-Copy
-Edit
-select p.* 
-from payment p
-join courier c on p.courier_id = c.courier_id
-where c.senderaddress in (
-    select senderaddress from courier 
-    group by senderaddress having count(*) > 1
-);
-46. retrieve all couriers sent from the same location (based on senderaddress)
-
-sql
-Copy
-Edit
-select * from courier 
-where senderaddress in (
-    select senderaddress from courier 
-    group by senderaddress having count(*) > 1
-);
-47. list employees and the number of couriers they have delivered
-
-sql
-Copy
-Edit
-select e.employee_id, e.employee_name, count(c.courier_id) as delivered_couriers
-from employee e
-join courier c on e.employee_id = c.employee_id
-where c.status = 'delivered'
-group by e.employee_id, e.employee_name;
-48. find couriers that were paid an amount greater than the cost of their respective courier services
-
-sql
-Copy
-Edit
-select p.payment_id, p.courier_id, p.amount, cs.cost
-from payment p
-join courier c on p.courier_id = c.courier_id
-join courierservice cs on c.courier_id = cs.service_id
-where p.amount > cs.cost;
-Let me know if you need any modifications! 🚀
-
-
-I prefer this response
-ChatGPT
-Response 2
-Finished thinking.
-Here are the SQL queries in lowercase for the requested tasks:
-
-38. retrieve a list of couriers and their corresponding sender information (if available)
-
-sql
-Copy
-Edit
-select c.courier_id, c.tracking_number, c.status, c.weight, 
-       u.user_id, u.user_name, u.user_email, u.user_phone, u.user_address
-from courier c
-left join user_tb u on c.sendername = u.user_name;
 --39. retrieve a list of couriers and their corresponding receiver information (if available)
 
 select c.courier_id, c.tracking_number, c.status, c.weight, 
