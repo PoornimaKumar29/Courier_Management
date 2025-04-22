@@ -1,0 +1,2 @@
+﻿server=POORNIMA\SQLSERVER2022
+database=Courier_Management
